@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+app.use(express.json());
 
 let persons = [
   { id: 1, name: "Arto Hellas", number: "040-123456" },
@@ -38,6 +39,23 @@ app.get('/info', (req, res) => {
     persons = persons.filter(person => person.id !== id);
   
     res.status(204).end();
+  });
+
+  app.post('/api/persons', (req, res) => {
+    const body = req.body;
+  
+    if (!body.name || !body.number) {
+      return res.status(400).json({ error: 'Name or number is missing' });
+    }
+  
+    const person = {
+      id: Math.floor(Math.random() * 10000), 
+      name: body.name,
+      number: body.number
+    };
+  
+    persons = persons.concat(person);
+    res.json(person);
   });
 
 const PORT = 3001;
