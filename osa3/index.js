@@ -47,6 +47,10 @@ app.get('/info', (req, res) => {
     if (!body.name || !body.number) {
       return res.status(400).json({ error: 'Name or number is missing' });
     }
+
+    if (persons.some(person => person.name === body.name)) {
+        return res.status(400).json({ error: 'Name must be unique' });
+    }
   
     const person = {
       id: Math.floor(Math.random() * 10000), 
